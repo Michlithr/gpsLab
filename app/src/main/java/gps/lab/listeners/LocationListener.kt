@@ -3,14 +3,14 @@ package gps.lab.listeners
 import android.location.Location
 import android.os.Bundle
 import android.util.Log
-import gps.lab.contract.MainContract
+import gps.lab.contracts.MainContract
 
 class LocationListener(private var view: MainContract.View) : android.location.LocationListener {
 
     override fun onLocationChanged(point: Location?) {
 
         if (point != null) {
-            view.updateView(point.latitude, point.longitude, point.speed, point.bearing)
+            view.updateLocation(point.latitude, point.longitude, point.speed, point.bearing)
         }
     }
 

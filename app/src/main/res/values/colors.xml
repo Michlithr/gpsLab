@@ -8,4 +8,7 @@
     <color name="colorSecondaryDark">#0031ca</color>
     <color name="colorPrimaryText">#ffffff</color>
     <color name="colorSecondaryText">#ffffff</color>
+
+    <color name="backgroundIndigo">#e8eaf6</color>
+    <color name="backgroundIndigoDark">#c5cae9</color>
 </resources>

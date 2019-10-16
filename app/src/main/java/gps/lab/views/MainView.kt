@@ -1,4 +1,4 @@
-package gps.lab.view
+package gps.lab.views
 
 import android.Manifest
 import android.content.Context
@@ -13,9 +13,11 @@ import gps.lab.Constants.Companion.COARSE_LOC_CODE
 import gps.lab.Constants.Companion.FINE_LOC_CODE
 import gps.lab.Constants.Companion.INTERNET_CODE
 import gps.lab.R
-import gps.lab.contract.MainContract
+import gps.lab.contracts.MainContract
 import gps.lab.listeners.LocationListener
+import gps.lab.presenter.MainPresenter
 import kotlinx.android.synthetic.main.activity_main.*
+import java.lang.Exception
 
 class MainView : AppCompatActivity(), MainContract.View {
 
@@ -25,26 +27,60 @@ class MainView : AppCompatActivity(), MainContract.View {
     private var locationManager: LocationManager? = null
     private var locationListener: LocationListener? = null
 
+    private var mainPresenter: MainPresenter? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         setupPermissions()
         setupGpsApi()
+
+        mainPresenter = MainPresenter()
+        mainPresenter!!.attachView(this)
+
+        setupView()
     }
 
-    override fun updateView(lat: Double, lon: Double, speed: Float, direction: Float) {
+    override fun onDestroy() {
+        super.onDestroy()
+        mainPresenter!!.detachView()
+    }
+
+    override fun updateLocation(lat: Double, lon: Double, speed: Float, bearing: Float) {
 
         latitude.text = lat.toString()
         longitude.text = lon.toString()
         if (speed != 0f)
             this.speed.text = speed.toString()
-        if (direction != 0f)
-            this.direction.text = "$direction degree"
+        if (bearing != 0f)
+            this.direction.text = "$bearing degree"
+    }
+
+    override fun updateDistanceBetweenPoints(distance: Float, bearing: Double) {
+
+        this.distanceBetweenPoints.text = distance.toString()
+        this.directionBetweenPoints.text = bearing.toString()
     }
 
     override fun showToast(text: String) {
         Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun setupView() {
+
+        saveButton.setOnClickListener {
+
+            try {
+                mainPresenter!!.addPoint(
+                    userLatitude.text.toString().toDouble(),
+                    userLongitude.text.toString().toDouble()
+                )
+            } catch (exception: Exception) {
+                showToast("Bad data format!")
+            }
+
+        }
     }
 
     private fun setupGpsApi() {
@@ -53,7 +89,7 @@ class MainView : AppCompatActivity(), MainContract.View {
             locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
             locationListener = LocationListener(this)
             try {
-                (locationManager as LocationManager).requestLocationUpdates(
+                locationManager!!.requestLocationUpdates(
                     LocationManager.GPS_PROVIDER,
                     0,
                     0f,
