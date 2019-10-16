@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">GpsLab</string>
+    <string name="latitude_label">Latitude:</string>
+    <string name="latitude_example">0</string>
+    <string name="longitude_label">Longitude:</string>
+    <string name="longitude_example">0</string>
+    <string name="speed_label">Speed:</string>
+    <string name="speed_example">0</string>
+    <string name="direction_label">Direction:</string>
+    <string name="no_direction">There\'s no direction</string>
+</resources>
