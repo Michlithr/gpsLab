@@ -10,5 +10,6 @@ interface MainContract {
 
     interface Presenter {
         fun addPoint(lat: Double, lon: Double)
+        fun updateLocation(lat: Double, lon: Double)
     }
 }

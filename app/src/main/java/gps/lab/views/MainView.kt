@@ -12,6 +12,8 @@ import androidx.core.content.ContextCompat
 import gps.lab.Constants.Companion.COARSE_LOC_CODE
 import gps.lab.Constants.Companion.FINE_LOC_CODE
 import gps.lab.Constants.Companion.INTERNET_CODE
+import gps.lab.Constants.Companion.LOCATION_DELAY
+import gps.lab.Constants.Companion.MIN_DISTANCE
 import gps.lab.R
 import gps.lab.contracts.MainContract
 import gps.lab.listeners.LocationListener
@@ -51,6 +53,7 @@ class MainView : AppCompatActivity(), MainContract.View {
 
         latitude.text = lat.toString()
         longitude.text = lon.toString()
+        mainPresenter!!.updateLocation(lat, lon)
         if (speed != 0f)
             this.speed.text = speed.toString()
         if (bearing != 0f)
@@ -91,8 +94,8 @@ class MainView : AppCompatActivity(), MainContract.View {
             try {
                 locationManager!!.requestLocationUpdates(
                     LocationManager.GPS_PROVIDER,
-                    0,
-                    0f,
+                    LOCATION_DELAY,
+                    MIN_DISTANCE,
                     locationListener
                 )
             } catch (securityException: SecurityException) {
