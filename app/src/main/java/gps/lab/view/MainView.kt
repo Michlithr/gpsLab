@@ -15,6 +15,7 @@ import gps.lab.Constants.Companion.INTERNET_CODE
 import gps.lab.R
 import gps.lab.contract.MainContract
 import gps.lab.listeners.LocationListener
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MainView : AppCompatActivity(), MainContract.View {
 
@@ -32,8 +33,14 @@ class MainView : AppCompatActivity(), MainContract.View {
         setupGpsApi()
     }
 
-    override fun updateView() {
-        Toast.makeText(this, "that works", Toast.LENGTH_SHORT).show()
+    override fun updateView(lat: Double, lon: Double, speed: Float, direction: Float) {
+
+        latitude.text = lat.toString()
+        longitude.text = lon.toString()
+        if (speed != 0f)
+            this.speed.text = speed.toString()
+        if (direction != 0f)
+            this.direction.text = "$direction degree"
     }
 
     override fun showToast(text: String) {
